@@ -1,0 +1,90 @@
+#!/bin/sh
+
+# Slackware build script for octave
+# Written by Kyle Guinn <elyk03@gmail.com>
+# HDF5 support by Aleksandar Samardzic <asamardzic@matf.bg.ac.yu>
+
+PRGNAM="octave"
+VERSION="3.0.1"
+ARCH=${ARCH:-i486}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM-$VERSION
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION.tar.bz2
+cd $PRGNAM-$VERSION
+chown -R root:root .
+chmod -R u+w,go+r-w,a-st .
+
+# The HDF5 API changed between versions 1.6.x and 1.8.x.  Octave
+# currently uses the 1.6.x API, so a compatibility flag is necessary.
+CPPFLAGS="-DH5_USE_16_API" \
+CFLAGS="$SLKCFLAGS -fno-strict-aliasing" \
+CXXFLAGS="$SLKCFLAGS -fno-strict-aliasing" \
+FFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --sysconfdir=/etc \
+  --localstatedir=/var \
+  --mandir=/usr/man \
+  --infodir=/usr/info \
+  --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --enable-shared \
+  --disable-static \
+  --enable-picky-flags \
+  --build=$ARCH-slackware-linux
+
+make
+make install DESTDIR=$PKG
+
+( cd $PKG 
+  find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : \
+    | xargs strip --strip-unneeded 2> /dev/null || true
+  find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : \
+    | xargs strip --strip-unneeded 2> /dev/null || true
+)
+
+( cd $PKG/usr/man
+  find . -type f -exec gzip -9 {} \;
+  for i in $(find . -type l); do \
+    ln -s $(readlink $i).gz $i.gz; rm $i; \
+  done
+)
+
+rm -f $PKG/usr/info/dir
+gzip -9 $PKG/usr/info/*
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a \
+  BUGS COPYING ChangeLog* INSTALL* NEWS* PROJECTS README* ROADMAP SENDING-PATCHES THANKS \
+    $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -p -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

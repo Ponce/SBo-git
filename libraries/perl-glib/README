@@ -1,0 +1,5 @@
+Glib (perl module)
+
+This module provides perl access to Glib and GLib's GObject libraries.
+
+This requires perl-extutils-depends and perl-extutils-pkgconfig.

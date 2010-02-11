@@ -1,0 +1,105 @@
+#!/bin/sh
+
+# Copyright 2008,2009  Robby Workman  Northport, AL, USA
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+# EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+PRGNAM=blender
+VERSION=${VERSION:-2.49a}
+ARCH=${ARCH:-i386}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+# Leave me alone?  If left as yes, then we'll leave the libGL* shared libaries
+# that are shipped with blender; otherwise, we'll remove them and depend on
+# the ones that are shipped with Slackware
+LMTFA=${LMTFA:-yes}
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+set -e
+
+if [ "$ARCH" != "x86_64" ]; then
+  ARCH=i386
+fi
+  
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar xvf $CWD/$PRGNAM-$VERSION-linux-glibc236-py26-${ARCH}.tar.bz2 
+cd $PRGNAM-$VERSION-linux-glibc236-py26-${ARCH}
+chown -R root:root .
+
+# Move the docs to our standard location first
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+mv \
+  BlenderQuickStart.pdf *license.txt blender.html copyright.txt release*.txt \
+    $PKG/usr/doc/$PRGNAM-$VERSION
+
+# The ".blender" directory shipped here is used by default, but then, it
+# shouldn't be writable by anyone but root, so we'll do something else
+mkdir -p $PKG/usr/share/blender
+mv .blender $PKG/usr/share/blender/dot-blender
+cat << EOF > $PKG/usr/share/blender/README.dot-blender
+This contains a "skeleton directory" for what should be a default
+\$HOME/.blender directory for every user. Don't delete it.
+EOF
+
+# Now move everything else
+mkdir -p $PKG/opt/blender
+mv * $PKG/opt/blender
+
+# Leave me alone?
+if [ "$LMTFA" != "yes" ]; then
+  rm -f $PKG/opt/blender/lib/libGL*
+fi
+
+# Put symlinks to icons in the standard places
+for size in 16x16 22x22 32x32 ; do
+  mkdir -p $PKG/usr/share/icons/hicolor/$size/apps
+  cd $PKG/usr/share/icons/hicolor/$size/apps
+  ln -s /opt/blender/icons/$size/blender.png .
+done
+mkdir -p $PKG/usr/share/icons/hicolor/scalable/apps
+( cd $PKG/usr/share/icons/hicolor/scalable/apps
+  ln -s /opt/blender/icons/scalable/blender.svg .
+)
+
+# Add a desktop menu entry
+mkdir -p $PKG/usr/share/applications
+cat $CWD/blender.desktop > $PKG/usr/share/applications/blender.desktop
+
+# Finally, let's create wrapper scripts to handle setting up 
+# users with the default $HOME/.blender directory if needed
+mkdir $PKG/usr/bin
+cat $CWD/blender-wrapper > $PKG/usr/bin/blender
+cat $CWD/blenderplayer-wrapper > $PKG/usr/bin/blenderplayer
+cat $CWD/blender-softwaregl-wrapper > $PKG/usr/bin/blender-softwaregl
+chmod 0755 $PKG/usr/bin/*
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -c n -l y $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

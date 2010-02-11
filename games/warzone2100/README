@@ -1,0 +1,14 @@
+This is an improved version of Warzone 2100, a 3D science fiction 
+real time strategy game developed by Pumpkin Studios and published 
+by Eidos Interactive in 1999. 
+ 
+Warzone 2100 offers campaign, tutorial, multi-player and single-player 
+skirmish game modes, unit designer, unit experience system, and everything 
+you would expect from a modern RTS game.
+
+The 2.3 Beta4 release is network incompatible with previous versions. (You cannot play multiplayer games with previous versions of Warzone.)
+Skirmish savegames from past games do NOT work on this release.
+
+This requires physfs, quesoglc, and OpenAL.
+
+

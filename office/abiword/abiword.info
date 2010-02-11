@@ -1,0 +1,12 @@
+PRGNAM="abiword"
+VERSION="2.8.1"
+HOMEPAGE="http://www.abisource.com"
+DOWNLOAD="http://www.abisource.com/downloads/abiword/2.8.1/source/abiword-2.8.1.tar.gz \
+          http://www.abisource.com/downloads/abiword/2.8.1/source/abiword-docs-2.8.1.tar.gz"
+MD5SUM="284fe25289c160c3797b527a8aacad12 \
+        6a6d8260004280687b862e3b9777c338"
+DOWNLOAD_x86_64=""
+MD5SUM_x86_64=""
+MAINTAINER="Robby Workman"
+EMAIL="rw@rlworkman.net"
+APPROVED="Erik Hanson"

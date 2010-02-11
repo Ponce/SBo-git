@@ -1,0 +1,3 @@
+QjackCtl is a simple Qt application to control the JACK sound server.
+
+Requires: jack-audio-connection-kit available at SlackBuilds.org

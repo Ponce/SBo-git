@@ -1,0 +1,106 @@
+#!/bin/sh
+
+# Slackware build script for python3
+# Written by Audrius Kažukauskas <audrius@neutrino.lt>
+# Based on Patrick Volkerding's official build script for python
+
+PRGNAM=python3
+VERSION=${VERSION:-3.1.1}
+ARCH=${ARCH:-i486}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+# Don't set any SLKCFLAGS here, or OPT="$SLKCFLAGS" before the ./configure.
+# Python gets the compile options right without any help.
+if [ "$ARCH" = "i486" ]; then
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  LIBDIRSUFFIX="64"
+fi
+
+set -eu
+
+# Location for Python site-packages:
+SITEPK=$PKG/usr/lib${LIBDIRSUFFIX}/python3.1/site-packages
+# same as above without $PKG
+TOOLSDIR=/usr/lib${LIBDIRSUFFIX}/python3.1/site-packages
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf Python-$VERSION
+tar xvf $CWD/Python-$VERSION.tar.bz2
+cd Python-$VERSION
+chown -R root:root .
+chmod -R u+w,go+r-w,a-s+X .
+
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --mandir=/usr/man \
+  --docdir=/usr/doc/$PRGNAM-$VERSION \
+  --with-ncurses \
+  --with-threads \
+  --enable-ipv6 \
+  --enable-shared \
+  --with-computed-gotos \
+  --build=$ARCH-slackware-linux
+
+# --libdir seems to be ignored - Makefile.pre.in has it hardcoded as
+# LIBDIR = $(exec_prefix)/lib and besides, there's also a SCRIPTDIR
+# that should probably be /usr/lib64 as well
+make \
+  LIBDIR=/usr/lib${LIBDIRSUFFIX} \
+  SCRIPTDIR=/usr/lib${LIBDIRSUFFIX}
+make altinstall \
+  LIBDIR=/usr/lib${LIBDIRSUFFIX} \
+  SCRIPTDIR=/usr/lib${LIBDIRSUFFIX} \
+  DESTDIR=$PKG
+
+# Install some python-demo files:
+mkdir -p $PKG/usr/doc/python3-$VERSION
+cp -a Demo $PKG/usr/doc/python3-$VERSION
+
+# We'll install the python-tools under site-packages:
+mkdir -p $SITEPK
+cp -a Tools/* $SITEPK
+
+mkdir -p $PKG/usr/doc/python3-$VERSION
+mv $SITEPK/README $PKG/usr/doc/python3-$VERSION/README.python-tools
+( cd $PKG/usr/doc/python3-$VERSION
+  ln -sf $TOOLSDIR Tools
+)
+
+# Install docs:
+mkdir -p $PKG/usr/doc/python3-$VERSION
+cp -a README LICENSE $PKG/usr/doc/python3-$VERSION
+cp -a Misc $PKG/usr/doc/python3-$VERSION
+cp -a Doc $PKG/usr/doc/python3-$VERSION
+
+# Python 2.6 already has this script.
+rm -f $PKG/usr/bin/2to3
+
+( cd $PKG
+  find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
+    xargs strip --strip-unneeded 2> /dev/null || true
+  find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
+    xargs strip --strip-unneeded 2> /dev/null
+)
+
+( cd $PKG/usr/man
+  find . -type f -exec gzip -9 {} \;
+  for i in $(find . -type l) ; do ln -s $(readlink $i).gz $i.gz ; rm $i ; done
+)
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

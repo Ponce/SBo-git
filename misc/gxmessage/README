@@ -1,0 +1,3 @@
+gxmessage is a GTK based xmessage clone.
+
+If you wish to disable NLS, pass 'NLS=disable' to the SlackBuild.

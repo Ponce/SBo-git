@@ -1,0 +1,10 @@
+aMule is a multiplatform ed2k client, fork of the eMule client, using the
+wxWidgets class library. It was originally forked from the xMule project,
+which in turn was forked from the lMule project. This is turn was the
+first fork of eMule to run nativly on Linux and other Unix-like systems.
+
+This requires wxGTK and cryptopp.
+
+It was reported that aMule doesn't work very well (or at all) with 
+cryptopp 5.6.0, so version 5.5.2 is recommended instead (you can build
+version 5.2.2 using the same build script for cryptopp-5.6.0).

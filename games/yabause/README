@@ -1,0 +1,17 @@
+Yabause is a Sega Saturn emulator. It has the following features:
+  * booting games from CD-ROM and ISO files
+  * booting games with either an emulated or original BIOS
+  * screenshot support
+  * savegame backups
+  * cheat system
+  * fullscreen playing
+  * multiple debugging options
+  * joystick support
+  * region select
+
+Requires: gtkglext
+Optional: mini18n and OpenAL
+For translation support install mini18n.
+
+Before using Yabause, you need to configure a few things in
+the Preferences dialog (File>Settings).

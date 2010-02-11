@@ -1,0 +1,103 @@
+#!/bin/sh
+
+# Slackware build script for murrine
+# Written by Grigorios Bouzakis (grbzks@gmail.com)
+
+# Modified by the SlackBuilds.org project
+
+PRGNAM=murrine
+VERSION=0.90.3
+ARCH=${ARCH:-i486}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+# The default themepack for murrine is 
+# http://cimi.netsons.org/media/download_gallery/MurrineThemePack.tar.bz2
+# Others may work fine here, but the script has not been tested with them.
+# If you want to use another theme or themepack, ammend the line below.
+THEME=MurrineThemePack
+
+set -e
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+fi
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION
+tar -xvf $CWD/$PRGNAM-$VERSION.tar.gz
+cd $PRGNAM-$VERSION
+chown -R root:root .
+find . \
+ \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
+ -exec chmod 755 {} \; -o \
+ \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
+ -exec chmod 644 {} \;
+
+# Install a default set of themes in the right directory.
+if [ -r $CWD/$THEME.tar.bz2 ]; then
+    mkdir -p $PKG/usr/share/themes
+    ( cd $PKG/usr/share/themes
+      echo "Installing $THEME"
+      tar -xvjf $CWD/$THEME.tar.bz2
+      chown -R root:root .
+    )
+else
+    # Warn users that the package may not work as expected
+    echo 
+    echo "A usable theme tarball does not appear to exist in "
+    echo "$CWD"
+    echo "See the README for more information on where to download"
+    echo "this. (or you didn't edit the script to reflect it or "
+    echo "something else is broken)."
+    echo 
+    echo "The script will continue to build a package, but some manual"
+    echo "setup may be required ager installation."
+    echo
+    echo "Type 'exit' to quit or any other key to continue the script."
+    read _continue
+    if [ "$_continue" = "exit" ]; then
+        exit 1
+    fi
+fi
+
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=/usr \
+  --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --enable-animation
+
+make
+make install DESTDIR=$PKG
+
+( cd $PKG
+  find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
+    xargs strip --strip-unneeded 2> /dev/null || true
+  find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
+    xargs strip --strip-unneeded 2> /dev/null
+)
+
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a AUTHORS COPYING ChangeLog INSTALL NEWS README $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

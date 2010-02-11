@@ -1,0 +1,7 @@
+[Desktop Entry]
+Categories=Game;
+Name=Starfighter
+Icon=starfighter
+Exec=starfighter
+Terminal=false
+Type=Application

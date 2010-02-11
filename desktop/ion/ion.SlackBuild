@@ -1,0 +1,85 @@
+#!/bin/sh
+
+# Slackware build script for ion
+# Written by Vasilis Papavasileiou <el03020 at mail dot ntua dot gr>
+# Updated by Jorge Gajon <gajon@gajon.org> for Slackware64 compatibility
+# Modified by the SlackBuilds.org project
+# (assumed to be in public domain per our submission policy)
+
+PRGNAM=ion
+VERSION=3_20090110
+ARCH=${ARCH:-i486}
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+SRC_VERSION=$(echo $VERSION | tr _ -)
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$SRC_VERSION
+tar xvf $CWD/$PRGNAM-$SRC_VERSION.tar.gz
+cd $PRGNAM-$SRC_VERSION
+chown -R root:root .
+chmod -R u+w,go+r-w,a-s .
+
+# Patch system.mk after filtering it through sed to replace a few path issues,
+# x86_64-specific things, and add optimization flags
+sed -e "s%@VERSION@%$VERSION%g" -e "s%@LIBDIRSUFFIX@%$LIBDIRSUFFIX%g" \
+  $CWD/system.mk.diff | patch -p1
+
+make OPTS="$SLKCFLAGS" -j1
+
+# The Makefile doesn't support DESTDIR :/
+make install \
+  BINDIR=$PKG/usr/bin \
+  ETCDIR=$PKG/etc/ion3 \
+  SHAREDIR=$PKG/usr/share/ion3 \
+  MANDIR=$PKG/usr/man \
+  DOCDIR=$PKG/usr/doc/$PRGNAM-$VERSION \
+  INCDIR=$PKG/usr/include/ion3 \
+  LIBDIR=$PKG/usr/lib${LIBDIRSUFFIX} \
+  LOCALEDIR=$PKG/usr/share/locale
+
+# Install an xinitrc file so that ion will show up in xwmconfig
+# We also need to patch the reference to the X11 lib directory when
+# running on x86_64.
+install -D -m 0755 $CWD/xinitrc.ion $PKG/etc/X11/xinit/xinitrc.ion
+
+( cd $PKG
+  find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
+    xargs strip --strip-unneeded 2> /dev/null || true
+  find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
+    xargs strip --strip-unneeded 2> /dev/null
+)
+
+( cd $PKG/usr/man
+  find . -type f -exec gzip -9 {} \;
+  for i in $(find . -type l) ; do ln -s $(readlink $i).gz $i.gz ; rm $i ; done
+)
+
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

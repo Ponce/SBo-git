@@ -1,0 +1,7 @@
+PostgreSQL is an advanced object-relational database management
+system (ORDBMS) based on POSTGRES. With more than 15 years of
+development history, it is quickly becoming the de facto
+database for enterprise level open source solutions.
+
+Before you can run postgresql you'll need to create the database;
+please see README.SBo.

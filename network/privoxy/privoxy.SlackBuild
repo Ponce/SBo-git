@@ -1,0 +1,138 @@
+#!/bin/sh
+
+# Slackware build script for privoxy
+
+# Copyright (c) 2007  alkos333 <me@alkos333.net>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#
+# * Redistributions of source code must retain the above copyright
+#   notice, this list of conditions and the following disclaimer.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Modified by the SlackBuilds.org project
+
+PRGNAM=privoxy
+VERSION=3.0.12
+ARCH=${ARCH:-i486}
+BUILD=${BUILD:-2}
+TAG=${TAG:-_SBo}
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "i486" ]; then
+  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "i686" ]; then
+  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+  LIBDIRSUFFIX=""
+elif [ "$ARCH" = "x86_64" ]; then
+  SLKCFLAGS="-O2 -fPIC"
+  LIBDIRSUFFIX="64"
+fi
+
+## privoxy user & group *MUST* exist before package creation
+# See http://slackbuilds.org/uid_gid.txt for current recomendations.
+PRIVOXY_USER=${PRIVOXY_USER:-privoxy}
+PRIVOXY_GROUP=${PRIVOXY_GROUP:-privoxy}
+
+if ! grep -q ^$PRIVOXY_GROUP: /etc/group 2>/dev/null ; then
+        echo "    Error: PRIVOXY group ($PRIVOXY_GROUP) doesn't exist."
+        echo "    Try creating one with: groupadd -g 206 $PRIVOXY_GROUP"
+        exit 1
+fi
+
+if ! grep -q ^$PRIVOXY_USER: /etc/passwd 2>/dev/null ; then
+        echo "    Error: PRIVOXY user ($PRIVOXY_USER) doesn't exist."
+        echo "    Try creating one with: useradd -u 206 -g $PRIVOXY_GROUP -d /dev/null -s /bin/false $PRIVOXY_USER"
+        exit 1
+fi
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $PRGNAM-$VERSION-stable
+tar xvf $CWD/$PRGNAM-$VERSION-stable-src.tar.gz
+cd $PRGNAM-$VERSION-stable
+chown -R root:root .
+chmod -R u+w,go+r-w,a-s .
+
+autoheader
+autoconf
+CFLAGS="$SLKCFLAGS" \
+CXXFLAGS="$SLKCFLAGS" \
+./configure \
+  --prefix=$PKG/usr \
+  --libdir=$PKG/usr/lib${LIBDIRSUFFIX} \
+  --sbindir=$PKG/usr/bin \
+  --sysconfdir=$PKG/etc/$PRGNAM \
+  --localstatedir=$PKG/var \
+  --datadir=$PKG/usr \
+  --mandir=$PKG/usr/man \
+  --docdir=$PKG/usr/doc/$PRGNAM-$VERSION \
+  --with-docbook=no \
+  --with-user=$PRIVOXY_USER \
+  --with-group=$PRIVOXY_GROUP \
+  --build=$ARCH-slackware-linux
+
+make || exit 1
+make install-strip || exit 1
+
+( cd $PKG/usr/man
+  find . -type f -exec gzip -9 {} \;
+)
+
+mv $PKG/usr/doc/$PRGNAM $PKG/usr/doc/$PRGNAM-$VERSION 
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+cat $CWD/README.SLACKWARE > $PKG/usr/doc/$PRGNAM-$VERSION/README.SLACKWARE
+find $PKG/usr/doc -type f -exec chmod 644 {} \;
+
+mkdir $PKG/etc/rc.d
+cat slackware/rc.privoxy.orig > $PKG/etc/rc.d/rc.$PRGNAM.new
+sed -i "	s/%PROGRAM%/$PRGNAM/
+		s,%SBIN_DEST%,/usr/bin,
+		s,%CONF_DEST%,/etc/$PRGNAM,
+		s/%USER%/$PRGNAM/
+		s/%GROUP%/$PRGNAM/
+" $PKG/etc/rc.d/rc.$PRGNAM.new 
+
+# Fix Path within the configuration files (thanks to h4kteur)
+sed -i "s#$PKG##g" $PKG/etc/$PRGNAM/config
+# Fix Path with the config file to point to right usermanual (thanks to BP{k})
+sed -i \
+  "s#user-manual /usr/doc/$PRGNAM#user-manual /usr/doc/$PRGNAM-$VERSION#" \
+    $PKG/etc/privoxy/config
+
+# Make .new files so we dont clobber existing configuration
+find $PKG/etc/privoxy -type f -exec mv {} {}.new \;
+# Don't clobber the logfile either
+mv $PKG/var/log/privoxy/logfile $PKG/var/log/privoxy/logfile.new
+ 
+# Remove this directory since it's empty and part of Slackware base 
+rmdir $PKG/var/run
+
+mkdir -p $PKG/install
+cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $CWD/doinst.sh > $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}

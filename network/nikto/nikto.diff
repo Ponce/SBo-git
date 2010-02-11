@@ -1,0 +1,15 @@
+diff -Naur nikto-2.1.0.orig/nikto.pl nikto-2.1.0/nikto.pl
+--- nikto-2.1.0.orig/nikto.pl	2009-10-18 00:26:52.000000000 +0200
++++ nikto-2.1.0/nikto.pl	2009-11-12 15:21:51.937445164 +0100
+@@ -81,9 +81,9 @@
+ require "$NIKTOCONFIG{PLUGINDIR}/nikto_core.plugin";
+ nprint("T:$starttime: Starting", "d");
+ require "$NIKTOCONFIG{PLUGINDIR}/nikto_single.plugin";
+-require "$NIKTOCONFIG{PLUGINDIR}/LW2.pm";
++#require "$NIKTOCONFIG{PLUGINDIR}/LW2.pm";
+ 
+-# use LW2;                   ### Change this line to use a different installed version
++use LW2;                   ### Change this line to use a different installed version
+ 
+ ($a, $b) = split(/\./, $LW2::VERSION);
+ die("- You must use LW2 2.4 or later\n") if ($a != 2 || $b < 4);

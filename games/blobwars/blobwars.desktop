@@ -1,0 +1,7 @@
+[Desktop Entry]
+Categories=Game;
+Name=Metal Blob Solid
+Icon=blobwars
+Exec=blobwars
+Terminal=false
+Type=Application

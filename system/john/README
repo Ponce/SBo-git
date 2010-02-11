@@ -1,0 +1,15 @@
+John the Ripper is a fast password cracker.  Its primary purpose is to detect 
+weak passwords.  Besides several crypt(3) password hash types most commonly 
+found on various Unix flavors, supported out of the box are Kerberos AFS and 
+Windows NT/2000/XP/2003 LM hashes, plus several more with contributed patches.
+
+This script includes an option to apply Ryan Lim's patch for JTR to support
+MPI.  MPI allows you to use multiple processors on a system or even a cluster 
+of systems for cracking passwords using JTR.  If you decide to apply this, you
+will also need openmpi installed.  JTR's author does not recommend using the
+patch, so use it at your own risk - for more information, see this link:
+  http://www.openwall.com/lists/john-users/2005/08/24/4
+This script also contains an optional "jumbo" patch, which enables processing 
+of many password hash types and ciphers that are not otherwise supported.
+
+Note this will not build in parallel; unset MAKEFLAGS if you have problems.

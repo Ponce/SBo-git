@@ -1,0 +1,4 @@
+PyFLTK provides a convenient wrapper for the FLTK GUI library for use in
+Python programs.
+
+This requires fltk.

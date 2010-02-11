@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# tor    The Onion Router
+#
+# Startup/shutdown script for tor. This is a wrapper around torctl;
+# torctl does the actual work in a relatively system-independent, or at least
+# distribution-independent, way, and this script deals with fitting the
+# whole thing into the conventions of the particular system at hand.
+
+# This script is a modified contrb/tor.sh, for use on Slackware.
+
+TORCTL=/usr/bin/torctl
+
+# torctl will use these environment variables
+TORUSER=tor
+export TORUSER
+
+case "$1" in
+
+    start)
+    $TORCTL start
+    ;;
+
+    stop)
+    $TORCTL stop
+    ;;
+
+    restart)
+    $TORCTL restart
+    ;;
+
+    reload)
+    $TORCTL reload
+    ;;
+
+    status)
+    $TORCTL status
+    ;;
+
+    *)
+    echo "Usage: $0 (start|stop|restart|reload|status)"
+esac
