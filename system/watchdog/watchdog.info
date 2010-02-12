@@ -1,5 +1,5 @@
 PRGNAM="watchdog"
-VERSION="5.6"
+VERSION="5.7"
 HOMEPAGE="http://sourceforge.net/projects/watchdog"
 DOWNLOAD="http://www.ibiblio.org/pub/Linux/system/daemons/watchdog/watchdog-5.7.tar.gz"
 MD5SUM="31766450ecfc9aff70fe966c0b9df06d"
