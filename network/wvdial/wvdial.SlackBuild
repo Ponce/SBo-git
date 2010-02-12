@@ -5,7 +5,7 @@
 # Written by Vincent Batts, vbatts@batts.mine.nu
 
 PRGNAM=wvdial
-VERSION=1.60
+VERSION=1.61
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -40,6 +40,8 @@ find . \
  -exec chmod 755 {} \; -o \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
+
+./configure
 
 # Add DESTDIR support to the Makefile
 patch -u Makefile $CWD/Makefile.diff

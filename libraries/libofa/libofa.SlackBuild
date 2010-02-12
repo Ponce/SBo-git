@@ -43,6 +43,7 @@ find . \
 # http://mirrors.usc.edu/pub/linux/distributions/gentoo/media-libs/libofa/files/
 patch -p0 < $CWD/libofa-0.9.3-gcc-4.patch
 patch -p1 < $CWD/libofa-0.9.3-gcc-4.3.patch
+patch -p1 < $CWD/libofa-0.9.3-gcc-4.4.patch
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \

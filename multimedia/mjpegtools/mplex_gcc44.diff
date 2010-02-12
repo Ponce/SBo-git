@@ -1,0 +1,11 @@
+--- mplex/lpcmstrm_in.cpp.1	2009-06-13 13:19:45.000000000 +0200
++++ mplex/lpcmstrm_in.cpp	2009-06-13 13:18:47.000000000 +0200
+@@ -53,7 +53,7 @@
+ 
+ bool LPCMStream::Probe(IBitStream &bs )
+ {
+-    char *last_dot = strrchr( bs.StreamName(), '.' );
++    const char *last_dot = strrchr( bs.StreamName(), '.' );
+     return 
+         last_dot != NULL 
+         && strcmp( last_dot+1, "lpcm") == 0;
