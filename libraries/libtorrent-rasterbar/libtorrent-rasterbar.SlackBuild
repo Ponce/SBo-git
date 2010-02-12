@@ -66,11 +66,12 @@ LDFLAGS="-L/usr/lib${LIBDIRSUFFIX}" \
   --disable-static \
   --enable-python-binding \
   --with-zlib=system \
-  --with-boost-system=mt \
-  --with-boost-filesystem=mt \
-  --with-boost-thread=mt \
-  --with-boost-regex=mt \
-  --with-boost-program-options=mt \
+  --with-boost-libdir=/usr/lib${LIBDIRSUFFIX} \
+  --with-boost-system=boost_system \
+  --with-boost-filesystem=boost_filesystem \
+  --with-boost-thread=boost_thread \
+  --with-boost-regex=boost_regex \
+  --with-boost-program-options=boost_program_options \
   --build=$ARCH-slackware-linux
 
 make
