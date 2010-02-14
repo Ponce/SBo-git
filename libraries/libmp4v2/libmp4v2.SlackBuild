@@ -34,7 +34,8 @@
 # Modified by the SlackBuilds.org Project
 
 PRGNAM=libmp4v2
-VERSION=1.5.0.1
+SRCNAM=mp4v2
+VERSION=1.9.1
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
@@ -57,11 +58,11 @@ fi
 
 set -e
 
-rm -rf $TMP/$PRGNAM-$VERSION $PKG
+rm -rf $TMP/$SRCNAM-$VERSION $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
-tar xvf $CWD/$PRGNAM-$VERSION.tar.bz2
-cd $PRGNAM-$VERSION
+tar xvf $CWD/$SRCNAM-$VERSION.tar.bz2
+cd $SRCNAM-$VERSION
 chown -R root:root .
 chmod -R u+w,go+r-w,a+s .
 
@@ -85,7 +86,7 @@ make install DESTDIR=$PKG
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a \
-  API_CHANGES AUTHORS COPYING ChangeLog INSTALL INTERNALS NEWS README TODO \
+  COPYING README \
     $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644  {} \;
