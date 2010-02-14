@@ -62,6 +62,7 @@ find . \
 # Thanks to B Watson for made me notice the ffmpeg issue.
 cat $CWD/patches/cmus-2.2.0-new-ffmpeg.patch | patch -p1
 cat $CWD/patches/cmus-2.2.0-symlink_attack.patch | patch -p1
+cat $CWD/patches/cmus-2.2.0-new-libmp4v2.patch | patch -p1
 
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
