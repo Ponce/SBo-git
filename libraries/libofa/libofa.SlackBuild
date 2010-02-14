@@ -44,6 +44,9 @@ find . \
 patch -p0 < $CWD/libofa-0.9.3-gcc-4.patch
 patch -p1 < $CWD/libofa-0.9.3-gcc-4.3.patch
 
+# patch for gcc 4.4 build
+patch -p1 < $CWD/libofa-0.9.3-gcc-4.4.patch
+
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
