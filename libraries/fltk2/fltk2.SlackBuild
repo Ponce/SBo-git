@@ -2,11 +2,11 @@
 
 # Slackware build script for fltk, version 2
 
-# Copyright 2009 Mikhail Zotov <mikhail dot ru@gmail dot com>
+# Copyright 2009-2010 Mikhail Zotov <mikhail dot ru@gmail dot com>
 # All rights reserved.
 #
-# The script is based on the build script for FLTK, version 1, by LukenShiro
-# The script has not been tested on x86_64.
+# The script is based on the build script for FLTK, version 1, by LukenShiro.
+# The script has been fixed by Robby Workman.
 #
 # Redistribution and use of this script, with or without modification, is
 # permitted provided that the following conditions are met:
@@ -26,7 +26,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=fltk2
-VERSION=2.0.x_r6921
+VERSION=2.0.x_r6970
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -63,7 +63,7 @@ cd $SRC_PRGNAM-$SRC_VERSION
 chown -R root:root .
 chmod -R u+w,go+r-w,a-s .
 
-# Fix linking when --libdir=/usr/lib64 
+# Fix linking when --libdir=/usr/lib64
 sed -i \
   -e '/RANLIB/s:$(libdir)/\(.*LIBNAME)\):$(libdir)/`basename \1`:g' \
   src/Makefile || exit

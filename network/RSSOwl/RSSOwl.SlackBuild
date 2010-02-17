@@ -2,10 +2,11 @@
 
 # Slackware build script for RSSOwl
 
-# Written by Vincent Batts, vbatts@hashbangbash.com
+# Written by Vincent Batts, vbatts@hashbangbash.com -2009
+# Maintained by Erik Hanson, erik@slackbuilds.org 2010-
 
 PRGNAM=RSSOwl
-VERSION=${VERSION:-2.0_M9}
+VERSION=${VERSION:-2.0.3}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -15,23 +16,12 @@ TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 
-DVER=2.0-M9
-
-if [ "$ARCH" = "i486" ]; then
-  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
-  LIBDIRSUFFIX=""
-elif [ "$ARCH" = "i686" ]; then
-  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
-  LIBDIRSUFFIX=""
-elif [ "$ARCH" = "x86_64" ]; then
-  SLKCFLAGS="-O2 -fPIC"
-  LIBDIRSUFFIX="64"
-fi
-
 if [ "$ARCH" = "x86_64" ]; then
-  SRC_ARCH="x86_64"
+  LIBDIRSUFFIX="64"
+  SRC_ARCH="x86_64.zip"
 else
-  SRC_ARCH="x86"
+  LIBDIRSUFFIX=""
+  SRC_ARCH="zip"
 fi
 
 set -e
@@ -40,7 +30,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf rssowl
-unzip $CWD/rssowl-$DVER.linux.gtk.$SRC_ARCH.zip
+unzip $CWD/rssowl-$VERSION.linux.${SRC_ARCH}
 cd rssowl
 chown -R root:root .
 find . \
@@ -80,9 +70,7 @@ X-KDE-StartupNotify=true
 EOF
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a \
-  about* \
-  $PKG/usr/doc/$PRGNAM-$VERSION
+cp -a about* $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 
 mkdir -p $PKG/install

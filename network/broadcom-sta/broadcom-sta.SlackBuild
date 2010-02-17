@@ -4,7 +4,7 @@
 # Public domain.
 
 PRGNAM=broadcom-sta
-VERSION=5.10.91.9.3
+VERSION=5.60.48.36
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}

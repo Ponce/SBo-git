@@ -3,6 +3,6 @@ Type=Application
 Exec=xcircuit
 Name=xcircuit
 GenericName=Circuit drawing program
-Icon=xcircuit
+Icon=/usr/share/pixmaps/xcircuit.png
 Terminal=false
 Categories=Qt;KDE;Graphics;Development;

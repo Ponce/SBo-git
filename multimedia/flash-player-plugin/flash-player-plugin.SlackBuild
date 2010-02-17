@@ -5,12 +5,12 @@
 # Script maintained by Robby Workman <rworkman@slackbuilds.org>
 
 PRGNAM=flash-player-plugin
-VERSION=10.0_r42
+VERSION=10.0_r45
 ARCH=${ARCH:-i386}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
-SRC_VERSION=10.0.42.34
+SRC_VERSION=10.0.45.2
 
 # If you use or intend to use Opera at some point, and you want
 # this plugin available to it, then pass "yes" as the value to this

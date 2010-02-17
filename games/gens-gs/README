@@ -5,3 +5,6 @@ of the various Gens forks, as well as improve portability to other platforms.
 
 To build without OpenGL, run the script with OPENGL=no.
 To build with the yasm assembler instead of nasm, run the script with NASM=no.
+
+To play RAR-compressed ROMs, rar and unrar are 
+required.

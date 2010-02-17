@@ -2,7 +2,7 @@
 
 # Slackware build script for dillo. It has NOT been tested on x86_64.
 
-# Copyright 2009 Mikhail Zotov
+# Copyright 2009-2010 Mikhail Zotov
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -23,7 +23,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=dillo
-VERSION=${VERSION:-2.1.1}
+VERSION=${VERSION:-2.2}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}

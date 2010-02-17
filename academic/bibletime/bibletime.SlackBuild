@@ -28,14 +28,14 @@
 # Modified by Robert Delahunt [twinreverb[at]puresimplicity.net
 
 PRGNAM=bibletime
-VERSION=2.4
+VERSION=2.5
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
 CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
-PKG=${PKG:-$TMP/package-$PRGNAM}
+PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 
 if [ "$ARCH" = "i486" ]; then

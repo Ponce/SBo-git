@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PRGNAM=virtinst
-VERSION=${VERSION:-0.500.0}
+VERSION=${VERSION:-0.500.2}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}

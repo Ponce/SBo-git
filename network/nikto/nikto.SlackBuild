@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Slackware build script for Nikto Web Scanner
-
-# Copyright 2009-2010 Marco Bonetti <sid77@slackware.it>
+#
+# Copyright 2010-2011 Marco Bonetti <sid77@slackware.it>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -23,7 +23,7 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=nikto
-VERSION=${VERSION:-2.1.0}
+VERSION=${VERSION:-2.1.1}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -106,3 +106,4 @@ cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+

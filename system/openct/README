@@ -6,9 +6,9 @@ readers to remote machines via TCP/IP.
 
 This requires pcsc-lite.
 
-Compiling with "HALD=1 ./openct.SlackBuild" enable smart-card reader
-detection using hal daemon's .fdi files instead of the default use of
-udev rules.  Compiling with "NONPRIV=1 ./openct.SlackBuild" enables
+Smart-card reader detection using hal daemon is now deprecated. We use
+udev rules only.
+Compiling with "NONPRIV=1 ./openct.SlackBuild" enables
 non-privileged mode, but you may need to modify /etc/rc.d/rc.openctd 
 to allow 'chown' to change user/group.
 

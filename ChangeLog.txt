@@ -1,3 +1,141 @@
+Wed Feb 17 01:31:26 UTC 2010
+academic/bibletime: Updated for version 2.5.
+  Thanks to Robert Delahunt.  --dsomero
+academic/ngspice: Updated for version 20.  Thanks to B. Jogai.  --dsomero
+academic/xcircuit: Updated for version 3.7.5.  Thanks to B. Jogai.  --dsomero
+audio/deadbeef: Added - deadbeefis a audio player.
+  Thanks to AlexGAV.  --dsomero
+desktop/bilbo: Added - bilbo is a KDE4 blogging client.
+  Thanks to Frank Perez.  --dsomero
+desktop/cwp: Updated for version 0.9.18.  Thanks to M.Dinslage.  --dsomero
+desktop/macopix: Added - macopix a desktop mascot application.
+  Thanks to Pablo Santamaria.  --dsomero
+desktop/musca: Added - musca is a simple dynamic window manager for X.
+  Thanks to Jim Bottino.  --dsomero
+desktop/qtwitter: Added - qtwitter is a microblogging client for StatusNet
+  sites and Twitter.  Thanks to Mikko Varri.  --dsomero
+desktop/xpenguins: Added - xpenguins gives you penguins for your desktop.
+  Thanks to Steven Pledger.  --dsomero
+development/apache-ant: Updated for version 1.8.0.
+  Thanks to Vincent Batts.  --dsomero
+development/bvi: Added - bvi is a binary vi like editor.
+  Thanks to Vincent Batts.  --dsomero
+development/bzr: Updated for version 2.0.3.
+  Thanks to Robby Workman.  --michiel
+development/geany: Updated for version 0.18.1.
+development/pychecker: Added - pychecker is a Python source code checking
+  tool.  Thanks to LukenShiro.  --dsomero
+development/pyflakes: Added - pyflakes is a passive error checker for Python
+  programs.  Thanks to LukenShiro.  --dsomero
+games/an: Added - an generates anagrams for a phrase supplied by the user.
+  Thanks to B. Watson.
+games/gens-gs: Updated for version r7.
+games/jag: Added - jag is a 2D arcade puzzle game.
+  Thanks to Larry Hajali.  --dsomero
+games/zdoom: Updated for version 2.4.1.
+graphics/jpeg2ps: Added - jpeg2ps converts JPEG files to PostScript Level
+  2 or 3 EPS..  Thanks to gshep.  --dsomero
+libraries/enca: Updated for version 1.13.
+libraries/fltk2: Updated for version 2.0.x-r6970.
+  Thanks to Mikhail Zotov.  --dsomero
+libraries/fltk: Updated for version 1.1.10.  Thanks to LukenShiro.  --dsomero
+libraries/fox-toolkit: Updated for version 1.6.37
+  Thanks to Robby Workman.  --michiel
+libraries/libewf: Updated for version 20100126.
+libraries/libisofs: Updated for version 0.6.28
+  Thanks to Robby Workman.  --michiel
+libraries/libmemcached: Updated for version 0.38.
+libraries/libmp4v2: Updated for version 1.9.1
+  Thanks to Alex Lysenka.  --michiel
+libraries/libssh: Updated for version 0.4.1.
+libraries/libwww-perl: Updated for version 5.834.
+  Thanks to LukenShiro.  --dsomero
+libraries/perl-digest-hmac: Updated for version 1.02.
+  Thanks to LukenShiro.  --dsomero
+libraries/perl-net-dns: Updated for version 0.66.
+  Thanks to LukenShiro.  --dsomero
+libraries/pyfltk: Updated for version 1.1.5.  Thanks to LukenShiro.  --dsomero
+libraries/python-transaction: Added - python-transaction provides Python
+  Transaction Management.  Thanks to Lionel Young.  --dsomero
+libraries/qoauth: Added - qoauth is a Qt-based C++ library for
+  OAuth authorization scheme.  Thanks to Mikko Varri.  --dsomero
+libraries/subvertpy: Added - subvertpy provides alternative Python bindings
+  for Subversion.  Thanks to Mikko Varri.  --dsomero
+misc/heyu: Added - heyu is X10 module controller software.
+  Thanks to B. Watson.  --dsomero
+misc/lbdb: Added - lbdb is a set of small tools, which collect mail addresses
+  from several sources and offer these addresses to the mutt external query
+  feature.  Thanks to Andy Bailey.  --dsomero
+multimedia/dvdrip: Updated for version 0.98.11_01.
+  Thanks to Luis Henrique.  --dsomero
+multimedia/emoc: Added - emoc is a front end for "ffmpeg" and "mencoder".
+  Thanks to otzy_007.  --dsomero
+multimedia/flash-player-plugin: Updated for version 10.0_r45.
+multimedia/k9copy: Updated for version 2.3.5.
+  Thanks to Roberto Neri.  --dsomero
+multimedia/xvst: Added - xvst Qt Gui for downloading your favorite video
+  clips from the web.  Thanks to Larry Hajali.  --dsomero
+network/broadcom-sta: Updated for version 5.60.48.36.
+  Thanks to David Matthew Jerry Koenig.  --dsomero
+network/dillo: Updated for version 2.2.  Thanks to Mikhail Zotov.  --dsomero
+network/fping6: Added - fping6 is a ping like program to send ICMP echo
+  requests to IPv6 hosts.  Thanks to Richlv.  --dsomero
+network/hiawatha: Added - hiawatha is a secure and advanced webserver.
+  Thanks to Antonio Hernández Blas.  --dsomero
+network/inadyn: Added - inadyn is a free DynDNS client.
+  Thanks to Niels Horn.  --dsomero
+network/liferea: Updated for version 1.4.28.  Thanks to Erik Hanson.  --dsomero
+network/nagios-plugins: Removed - Moved to system.
+network/ndiswrapper: Updated for version 1.56.
+network/nikto: Updated for version 2.1.1.  Thanks to Marco Bonetti.  --dsomero
+network/python-twisted-web2: Added - python-twisted-web2 is a experimental
+  Twisted web server.  Thanks to Lionel Young.  --dsomero
+network/RSSOwl: Updated for version 2.0.3.  Thanks to Erik Hanson.  --dsomero
+network/shorewall6: Updated for version 4.4.7.  Thanks to ArTourter.  --dsomero
+network/shorewall: Updated for version 4.4.7.1.
+  Thanks to ArTourter.  --dsomero
+network/spamassassin: Updated for version 3.3.0.
+  Thanks to LukenShiro.  --dsomero
+network/tinyproxy: Added - tinyproxy is a lightweight HTTP proxy.
+  Thanks to Kevin Pulo.  --dsomero
+network/wireshark: Updated for version 1.2.6.
+  Thanks to Michiel van Wessem.  --dsomero
+office/abiword: Updated for version 2.8.2.
+  Thanks to Robby Workman.  --michiel
+office/fbreader: Updated for version 0.12.2.  Thanks to Niels Horn.  --dsomero
+office/homebank: Updated for version 4.2.1.  Thanks to Erik Hanson.  --dsomero
+office/htmldoc: Updated with fix for CVE-2009-3050 vulnerability.
+  Thanks to LukenShiro.  --dsomero
+office/openoffice.org: Updated for version 3.2.0.
+  Thanks to Robby Workman.  --michiel
+system/apcupsd: Updated for version 3.14.8.
+system/atarisio: Added - atarisio is a disk emulator for use with Atari
+  8-bit computer and SIO2PC.  Thanks to B. Watson.  --dsomero
+system/bogofilter: Updated for version 1.2.1.
+system/multitail: Updated for version 5.2.5.  Thanks to Erik Hanson.  --dsomero
+system/nagios-plugins: Updated for version 1.4.14.
+  Thanks to Zordrak.  --dsomero
+system/nbench: Added - nbench is BYTE's Native Mode Benchmarks.
+  Thanks to Niels Horn.  --dsomero
+system/openct: Updated for version 0.6.19.  Thanks to LukenShiro.  --dsomero
+system/opensc: Updated for version 0.11.12.  Thanks to LukenShiro.  --dsomero
+system/powernowd: Added - powernowd is a cpu frequency daemon.
+  Thanks to David Woodfall.  --dsomero
+system/rar: Updated for version 3.9.2.
+system/rdiff-backup: Added - rdiff-backup is a backup tool.
+  Thanks to kev.  --dsomero
+system/shake: Added - shake is a filesystem defragmenter that runs in
+  userspace.  Thanks to V'yacheslav Stetskevych.  --dsomero
+system/vifm: Added - vifm is a ncurses-based file manager with vi-like
+  keybindings.  Thanks to V'yacheslav Stetskevych.  --dsomero
+system/virt-manager: Updated for version 0.8.3.
+  Thanks to Ash Wiren.  --dsomero
+system/virtinst: Updated for version 0.500.2.  Thanks to Ash Wiren.  --dsomero
+system/xfburn: Updated for version 0.4.3
+  Thanks to Robby Workman.  --michiel
+system/xfe: Updated for version 1.32.1
+  Thanks to Robby Workman.  --michiel
++--------------------------+
 Wed Feb 10 21:45:01 UTC 2010
 academic/itex2mml: Added - itex2mml is a program to convert inline TeX to
   MathML.  Thanks to David Matthew Jerry Koenig.  --dsomero

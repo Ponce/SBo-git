@@ -2,7 +2,7 @@
 
 # Slackware build script for htmldoc
 
-# Copyright 2009  LukenShiro <lukenshiro@ngi.it>
+# Copyright 2009-2010  LukenShiro <lukenshiro@ngi.it>
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -22,12 +22,13 @@
 # OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-# Thanks to Gentoo htmldoc's .ebuild maintainer for hints about configure's workaround
+# Thanks to Gentoo htmldoc's .ebuild maintainer for hints about configure's
+# workaround, and for a patch to fix CVE-2009-3050.
 
 PRGNAM=htmldoc
 VERSION=1.8.27
 ARCH=${ARCH:-i486}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-3}
 TAG=${TAG:-_SBo}
 
 CWD=$(pwd)
@@ -47,9 +48,6 @@ elif [ "$ARCH" = "x86_64" ]; then
   SLKCFLAGS="-O2 -fPIC"
   LIBDIRSUFFIX="64"
 fi
-
-# Exit on most errors
-set -e
 
 rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
@@ -81,14 +79,14 @@ CXXFLAGS="$SLKCFLAGS" \
 sed -i 's|\$(datadir)/doc/htmldoc|\$(prefix)/doc/htmldoc-1.8.27|g' \
   doc/Makefile
 
-make all
+# Apply patch to fix several insecure calls to sscanf().
+# It's intended to resolve CVE-2009-3050 vulnerability.
+patch -p0 < $CWD/insecure_sscanf_patch.diff
+
+make all || exit 1
+
 # DESTDIR= is not supported
-make prefix=$PKG/usr install
-# Documentation
-cd doc
-  make all
-  make prefix=$PKG/usr install
-cd ..
+make prefix=$PKG/usr install || exit 1
 
 # Copy some files who are not automatically installed (main binary, .desktop, icons, etc..)
 mkdir -p $PKG/usr/bin

@@ -2,11 +2,15 @@
 
 # Slackware build script for gens-gs
 # Written by Steven Pledger <piratesmack@ymail.com>
+#
+# rev 2:
+# -SlackBuild doesn't fail when ARCH is set to i686 anymore
+# -Added --disable-debugger
 
 PRGNAM=gens-gs
 VERSION=${VERSION:-r7}
 ARCH=${ARCH:-i486}
-BUILD=${BUILD:-3}
+BUILD=${BUILD:-4}
 TAG=${TAG:-_SBo}
 
 CWD=$(pwd)
@@ -64,8 +68,8 @@ CXXFLAGS="$SLKCFLAGS" \
   --sysconfdir=/etc \
   --localstatedir=/var \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
-  --build=$ARCH-slackware-linux \
   --disable-static \
+  --disable-debugger \
   $CFGOPTS
 
 make

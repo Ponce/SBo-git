@@ -2,7 +2,7 @@
 
 # Slackware build script for OpenOffice.org
 
-# Copyright 2006-2009  Robby Workman, Northport, Alabama, ASA
+# Copyright 2006-2010  Robby Workman, Northport, Alabama, ASA
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -31,8 +31,8 @@
 # Thsnks to necropresto for better x86_64 support
 
 PRGNAM=openoffice.org
-VERSION=3.1.1
-ARCH=${ARCH:-i586}
+VERSION=3.2.0
+ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
@@ -49,7 +49,7 @@ OUTPUT=${OUTPUT:-/tmp}
 # ftp://ftp.free.fr/mirrors/ftp.openoffice.org/localized/$OOLANG/$VERSION/
 # Thanks to Niki Kovacs for finding this :-)
 OOLANG=${OOLANG:-en-US}
-PKG_LANG=$(echo $OOLANG | sed s/-/_/)	# Leave this alone
+PKG_LANG=${OOLANG//-/_}	# Leave this alone
 # Some localized versions only ship with a bundled JRE, and we'd like this
 # script to work on those as well...
 WJRE=${WJRE:-no}
@@ -99,7 +99,7 @@ else
 fi
 
 cd $TMP/$SOURCEDIR/RPMS/
-mv desktop-integration/openoffice.org3.1-freedesktop-menus-3.1-9420.noarch.rpm .
+mv desktop-integration/openoffice.org3.2-freedesktop-menus-3.2-9472.noarch.rpm .
 rm *onlineupdate*.rpm # We don't want this
 for FILE in *.rpm ; do rpm2cpio < $FILE | cpio -imdv ; done
 rm -rf desktop-integration *.rpm
@@ -119,7 +119,7 @@ cd $PKG/usr/bin
 cd -
 
 # Remove DejaVu and Liberation fonts - these are included in other packages
-rm -f opt/openoffice.org/basis3.1/share/fonts/truetype/[DL]*.ttf
+rm -f opt/openoffice.org/basis3.2/share/fonts/truetype/[DL]*.ttf
 
 # Fix Exec commands in the desktop files
 # See http://bugzilla.xfce.org/show_bug.cgi?id=2430 

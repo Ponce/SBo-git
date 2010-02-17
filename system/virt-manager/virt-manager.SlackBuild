@@ -7,9 +7,9 @@
 # Lots of fixes by Robby Workman
 
 PRGNAM=virt-manager		
-VERSION=${VERSION:-0.8.0}	
+VERSION=${VERSION:-0.8.3}	
 ARCH=${ARCH:-i486}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}	 
 
 CWD=$(pwd)

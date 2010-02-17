@@ -5,15 +5,15 @@
 # Written by Pablo Santamaria (pablosantamaria@gmail.com)
 
 PRGNAM=zdoom
-VERSION=${VERSION:-2.4.0}
+VERSION=${VERSION:-2.4.1}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
 CWD=$(pwd)
-TMP=${TMP:-/tmp/SBo}
+TMP=${TMP:-/tmp/SBo}	
 PKG=$TMP/package-$PRGNAM
-OUTPUT=${OUTPUT:-/tmp}
+OUTPUT=${OUTPUT:-/tmp}	
 
 if [ "$ARCH" = "i486" ]; then
   SLKCFLAGS="-O2 -march=i486 -mtune=i686"
