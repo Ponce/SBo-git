@@ -1,0 +1,8 @@
+PRGNAM="perl-IO-Compress-Zlib"
+VERSION="2.015"
+HOMEPAGE="http://search.cpan.org/~pmqs/IO-Compress-Zlib-2.015/"
+DOWNLOAD="http://search.cpan.org/CPAN/authors/id/P/PM/PMQS/IO-Compress-Zlib-2.015.tar.gz"
+MD5SUM="22f3b677a6f1782713c8451966598d3f"
+MAINTAINER="David Somero"
+EMAIL="dsomero@hotmail.com"
+APPROVED=""

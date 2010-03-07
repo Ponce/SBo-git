@@ -1,0 +1,20 @@
+diff -crB libofa-0.9.3.orig/examples/example.cpp libofa-0.9.3/examples/example.cpp
+*** libofa-0.9.3.orig/examples/example.cpp	2010-01-05 11:47:39.025103842 +0100
+--- libofa-0.9.3/examples/example.cpp	2010-01-05 11:48:21.114133375 +0100
+***************
+*** 8,14 ****
+  -------------------------------------------------------------------*/
+  
+  #include "protocol.h"
+! 
+  #include <string.h>
+   
+  AudioData* loadWaveFile(char *file);
+--- 8,14 ----
+  -------------------------------------------------------------------*/
+  
+  #include "protocol.h"
+! #include <cstdio>
+  #include <string.h>
+   
+  AudioData* loadWaveFile(char *file);

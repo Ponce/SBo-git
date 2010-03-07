@@ -54,6 +54,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --localstatedir=/var \
   --mandir=/usr/man \
   --disable-static \
+  --x-libraries=/usr/X11R6/lib${LIBDIRSUFFIX} \
   --build=$ARCH-slackware-linux
 
 make

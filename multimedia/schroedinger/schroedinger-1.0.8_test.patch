@@ -1,0 +1,18 @@
+--- schroedinger-1.0.8/testsuite/perf/dequantise_speed.c.orig	2009-09-29 07:08:51.000000000 +0200
++++ schroedinger-1.0.8/testsuite/perf/dequantise_speed.c	2009-10-31 19:00:21.000000000 +0100
+@@ -98,6 +98,7 @@
+   }
+ }
+ 
++#if 0
+ void
+ schro_dequantise_s16_table (int16_t *dest, int16_t *src, int quant_index,
+     schro_bool is_intra, int n)
+@@ -108,6 +109,7 @@
+     dest[i] = table[src[i] + 32768];
+   }
+ }
++#endif
+ 
+ #if 0
+ void

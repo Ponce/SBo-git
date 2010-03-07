@@ -1,0 +1,19 @@
+# HOW TO EDIT THIS FILE:
+# The "handy ruler" below makes it easier to edit a package description.  Line
+# up the first '|' above the ':' following the base package name, and the '|'
+# on the right side marks the last column you can put a character in.  You must
+# make exactly 11 lines for the formatting to be correct.  It's also
+# customary to leave one space after the ':'.
+
+    |-----handy-ruler------------------------------------------------------|
+celt: CELT (ultra-low delay audio codec)
+celt:
+celt: The CELT codec is a compression algorithm for audio.
+celt: Like MP3, Vorbis, and AAC it is suitable for transmitting music with
+celt: high quality. Unlike these formats CELT imposes very little delay on
+celt: the signal, even less than is typical for speech centric formats like
+celt: Speex, GSM, or G.729.
+celt:
+celt: homepage:
+celt: http://www.celt-codec.org/
+celt:

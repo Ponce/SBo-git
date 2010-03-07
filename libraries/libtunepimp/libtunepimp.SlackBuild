@@ -42,6 +42,10 @@ find . \
 # Add some needed includes for gcc-4.3
 patch -p1 < $CWD/libtunepimp-0.5.3-gcc43.patch
 
+# Add a trivial fix for building with gcc 4.4
+# tnx to Yavor Doganov http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=560466
+patch -p1 < $CWD/libtunepimp-gcc44.patch
+
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
