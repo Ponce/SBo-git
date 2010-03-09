@@ -59,6 +59,9 @@ chown -R root:root $PRGNAM-$VERSION freetype-$FREETYPE
 chmod -R u+w,go+r-w,a-s $PRGNAM-$VERSION freetype-$FREETYPE
 cd $PRGNAM-$VERSION
 
+# patch for libpng-1.4
+patch -p1 < $CWD/libpng14.patch
+
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
@@ -91,7 +94,7 @@ chown root:root $PKG/usr/share/fontforge/*.cidmap
   find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
     xargs strip --strip-unneeded 2> /dev/null || true
   find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null
+    xargs strip --strip-unneeded 2> /dev/null || true
 )
 
 ( cd $PKG/usr/man || exit 1
