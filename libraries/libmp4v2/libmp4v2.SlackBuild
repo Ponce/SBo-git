@@ -92,6 +92,9 @@ cp -a \
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
 find $PKG/usr/doc/$PRGNAM-$VERSION -type f -exec chmod 644  {} \;
 
+# fix man path
+mv $PKG/usr/share/man $PKG/usr/man
+
 find $PKG/usr/man -type f -exec gzip -9 {} \;
 rm -rf $PKG/usr/man/manm
 

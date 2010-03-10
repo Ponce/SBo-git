@@ -68,6 +68,9 @@ find . \
 # Disabling lirc_gpio driver as it does no longer work with kernel 2.6.22+
 sed -i -e "s:lirc_gpio\.o::" drivers/lirc_gpio/Makefile.am || exit 1
 
+# patch for kernel from http://hg.geexbox.org/geexbox/file/3d393b06ebb6/packages/lirc/patches/95_build-fix-2.6.33.diff
+zcat $CWD/lirc-2.6.33.diff.gz | patch -p1
+
 autoreconf
 libtoolize
 

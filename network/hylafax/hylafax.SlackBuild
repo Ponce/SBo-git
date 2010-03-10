@@ -27,7 +27,7 @@
 # General script clean-up and minor improvements
 
 PRGNAM=hylafax
-VERSION=${VERSION:-6.0.2}
+VERSION=${VERSION:-6.0.4}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}

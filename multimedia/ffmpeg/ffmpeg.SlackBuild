@@ -7,7 +7,7 @@
 # Modified by Heinz Wiesinger <pprkut@liwjatan.org>
 
 PRGNAM=ffmpeg
-VERSION=${VERSION:-0.5}
+VERSION=${VERSION:-r21539}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -33,15 +33,13 @@ fi
 if [ "${AMRNB:-no}" = "no" ]; then
   amr_nb=""
 else
-  non_free="--enable-nonfree"
-  amr_nb="--enable-libamr-nb"
+  amr_nb="--enable-libopencore-amrnb"
 fi
 
 if [ "${AMRWB:-no}" = "no" ]; then
   amr_wb=""
 else
-  non_free="--enable-nonfree"
-  amr_wb="--enable-libamr-wb"
+  amr_wb="--enable-libopencore-amrwb"
 fi
 
 if [ "${DC1394:-no}" = "no" ]; then
@@ -58,6 +56,7 @@ fi
 
 if [ "${FAAC:-yes}" = "yes" ]; then
   libfaac="--enable-libfaac"
+  non_free="--enable-nonfree"
 else
   libfaac=""
 fi
@@ -117,7 +116,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$VERSION.tar.bz2
+tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 chmod -R u+w,go+r-w,a-s .
