@@ -25,7 +25,7 @@
 # Thanks to Robby Workman for suggestions to improve this script.
 
 PRGNAM=nvidia-driver
-VERSION=190.42
+VERSION=195.36.15
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}

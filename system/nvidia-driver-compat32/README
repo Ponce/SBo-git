@@ -1,0 +1,40 @@
+These are the 32bit libraries of NVidia video driver for the X.Org
+X-server. This package is needed only on multilib x86_64 slackware.
+
+Since this nvidia-driver conflicts with some files of xorg, it's a bit
+complex to install/uninstall the driver.  However, installation of the
+nvidia-driver package itself backs up the conflicting files and puts the
+nvidia-specific files into place.
+
+Heinz Wiesinger, the author of the build script, has written a script called
+nvidia-switch (that has been modified by lumak of linuxquestions.org to
+nvidia-switch-32), which is used to switch between the stock xorg driver and
+the nvidia driver, but it will not edit xorg.conf for you; you have to do
+that manually.  The nvidia-switch-32 script is installed to /usr/sbin.
+
+Usage of nvidia-switch-32:
+  nvidia-switch-32 --xorg	 <-->  switch to the stock xorg files
+  nvidia-switch-32 --nvidia  <--> switch to the proprietary nvidia files
+  nvidia-switch-32 --cleanup <--> switch to the stock xorg file and remove all
+	symlinks created by nvidia-switch-32
+
+You do NOT have to run nvidia-switch-32 after installing or upgrading the
+package. ONLY if you want to explicitely switch to the xorg files,
+afterwards switching back to nvidia files or before uninstalling the
+package.
+
+No special steps are necessary when updating nvidia-driver from a previous
+package. If you update to a newer xorg, you do not have to reinstall
+nvidia-driver either. Just run "nvidia-switch-32 --nvidia" in that case.
+
+Before uninstalling this package, it is important that you execute
+'nvidia-switch-32 --cleanup', which will switch back to the stock xorg files
+and remove all links created by nvidia-switch-32 before.
+If you forget to do this, you'll have to do the switch manually, or xorg
+won't work on next startup.  Here are the affected files:
+  /usr/lib/libGL.so.1.2
+  /usr/include/GL/{gl.h glx.h glxext.h glext.h}
+  /usr/lib/xorg/modules/extensions/{libglx.so libglx.la}
+
+This also requires the nvidia-kernel and the nvidia-driver packages from
+SlackBuilds.org.

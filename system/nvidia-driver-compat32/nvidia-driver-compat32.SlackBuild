@@ -1,0 +1,103 @@
+#!/bin/sh
+
+# Slackware build script for nvidia-driver-compat32
+
+# Modified 2009 by separate author
+# Copyright 2007-2009 Heinz Wiesinger <pprkut@liwjatan.at>
+# All rights reserved.
+#
+# Redistribution and use of this script, with or without modification, is
+# permitted provided that the following conditions are met:
+#
+# 1. Redistributions of this script must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR ''AS IS'' AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+# EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Thanks to Robby Workman for suggestions to improve this script.
+
+PRGNAM=nvidia-driver-compat32
+VERSION=195.36.15
+ARCH=x86_64  # This is only for x86_64 bit platforms
+BUILD=${BUILD:-1}
+TAG=${TAG:-_SBo}
+
+CWD=$(pwd)
+TMP=${TMP:-/tmp/SBo}
+PKG=$TMP/package-$PRGNAM
+OUTPUT=${OUTPUT:-/tmp}
+
+if [ "$ARCH" = "x86_64" ]; then
+  TARGET="x86_64"
+  # This is required by nvidia-switch to manage the 32bit libs
+  LIBDIRSUFFIX=""
+else
+  echo "ERROR: this script is only for repackaging the 32bit compatability libs on the x86_64 platform."
+  exit 1
+fi
+
+# NOTE!!! you most have the package that says pkg2.  This package contains
+# the 32bit libs in a directory usr/lib32 and we move it to usr/lib
+SRCNAM=NVIDIA-Linux-$TARGET-$VERSION-pkg2
+
+set -e
+
+rm -rf $PKG
+mkdir -p $TMP $PKG $OUTPUT
+cd $TMP
+rm -rf $SRCNAM
+sh $CWD/$SRCNAM.run --extract-only
+cd $SRCNAM
+chown -R root:root .
+chmod -R u+w,go+r-w,a-s .
+
+mkdir -p $PKG/usr/lib
+
+# Install the libs
+cd usr/lib32
+  # remove vdpau stuff, will go in libvdpau-compat32 :)
+  rm -fR vdpau libvdpau*
+  cp -a * $PKG/usr/lib
+  #Rename those files which would overwrite xorg's original files
+  for i in libGL.so.$VERSION libGLcore.so.$VERSION; do
+    mv $PKG/usr/lib/$i $PKG/usr/lib/$i-nvidia ;
+  done
+cd -
+
+# Install modified nvidia-switch 
+mkdir -p $PKG/usr/sbin
+install -m 0755 $CWD/nvidia-switch32 $PKG/usr/sbin/nvidia-switch32
+sed -i s/PKGVERSION/$VERSION/g $PKG/usr/sbin/nvidia-switch32
+sed -i s/LIBDIRSUFFIX/$LIBDIRSUFFIX/g $PKG/usr/sbin/nvidia-switch32
+
+# These correct wrong paths
+sed -i "s|__LIBGL_PATH__|/usr/lib/|" $PKG/usr/lib/libGL.la
+# I'm unsure on this one.  Nvidia's 32bit and 64big libGL.la link to
+# /usr/X11R6/lib.  The nvidia package is organized with usr/lib and
+# usr/lib32.  SO... if you have problems, try changing this to
+# /usr/lib64. Hoever, I doubt that is proper.
+sed -i "s|/usr/X11R6/lib|/usr/lib/|" $PKG/usr/lib/libGL.la
+
+cd $TMP/$SRCNAM
+mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+# Note doc's are installed with normal package.
+cp -a LICENSE pkg-history.txt $PKG/usr/doc/$PRGNAM-$VERSION
+cat $CWD/README > $PKG/usr/doc/$PRGNAM-$VERSION/compat32.Slackware
+cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+
+mkdir -p $PKG/install
+sed "s/PKGVERSION/$VERSION/g" $CWD/slack-desc > $PKG/install/slack-desc
+sed "s/PKGVERSION/$VERSION/g" $CWD/doinst.sh > $PKG/install/doinst.sh
+sed -i "s/LIBDIRSUFFIX/$LIBDIRSUFFIX/g" $PKG/install/doinst.sh
+
+cd $PKG
+/sbin/makepkg -l n -c n $OUTPUT/$PRGNAM-$VERSION-$TARGET-$BUILD$TAG.${PKGTYPE:-txz}
