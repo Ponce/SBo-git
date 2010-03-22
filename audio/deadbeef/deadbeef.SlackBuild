@@ -60,8 +60,8 @@ CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
   --prefix=/usr \
-  --docdir=/usr/doc/$PRGNAM-$VERSION \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
+  --docdir=/usr/doc/$PRGNAM-$VERSION \
   --enable-shared \
   --build=$ARCH-slackware-linux
 
