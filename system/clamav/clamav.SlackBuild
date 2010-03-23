@@ -26,7 +26,7 @@
 # No additional license terms added
 
 PRGNAM=clamav
-VERSION=0.95.2
+VERSION=0.95.3
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -38,7 +38,7 @@ OUTPUT=${OUTPUT:-/tmp}
 
 # Two letter country code
 # See http://www.iana.org/cctld/cctld-whois.htm for options
-COUNTRY=${COUNTRY:-us}
+COUNTRY=${COUNTRY:-it}
 
 # Read "README.SLACKWARE" for compatibility with amavisd-new
 CLAMUSR=${CLAMUSR:-clamav}
