@@ -55,6 +55,10 @@ CFLAGS="$SLKCFLAGS" \
 make docdir=/usr/doc/$PRGNAM-$VERSION
 make install-strip docdir=/usr/doc/$PRGNAM-$VERSION DESTDIR=$PKG
 
+#correct link to lives executable
+rm $PKG/usr/bin/lives
+ln -s /usr/bin/lives-exe $PKG/usr/bin/lives
+
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a COPYING INSTALL NEWS $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild

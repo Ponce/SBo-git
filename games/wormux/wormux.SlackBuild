@@ -26,7 +26,7 @@
 # Modified by the SlackBuilds.org project
 
 PRGNAM=wormux
-VERSION=0.8.5
+VERSION=0.9.0
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
