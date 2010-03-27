@@ -20,6 +20,4 @@ fi
 
 config etc/rc.d/rc.drbd.new
 config etc/drbd.conf.new
-
-chroot . /sbin/depmod -ae @KERNEL@
-
+config etc/drbd.d/global_common.conf.new
