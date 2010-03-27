@@ -59,7 +59,7 @@ cp -a id3.man $PKG/usr/man/man1/id3.1
   find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
     xargs strip --strip-unneeded 2> /dev/null || true
   find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null
+    xargs strip --strip-unneeded 2> /dev/null || true
 )
 
 ( cd $PKG/usr/man
