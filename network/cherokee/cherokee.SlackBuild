@@ -5,9 +5,9 @@
 # Written by Pablo Hernan Saro (pablosaro@gmail.com)
 
 PRGNAM=cherokee
-VERSION=${VERSION:-0.99.24}
+VERSION=${VERSION:-0.99.44}
 ARCH=${ARCH:-i686}
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-3}
 TAG=${TAG:-_SBo}
 
 CWD=$(pwd)
@@ -26,8 +26,14 @@ elif [ "$ARCH" = "x86_64" ]; then
   LIBDIRSUFFIX="64"
 fi
 
+# Set the WWW user
+WWWUSER=${WWWUSER:-apache}
+
+# Set the WWW group
+WWWGROUP=${WWWGROUP:-apache}
+
 # Set the WWW root directory
-WWWROOT=${WWWROOT:-/var/www}
+WWWROOT=${WWWROOT:-/var/www/htdocs-cherokee}
 
 # Enable/Disable IPv6 support
 IPV6=${IPV6:-no}
@@ -66,7 +72,10 @@ CXXFLAGS="$SLKCFLAGS" \
   --mandir=/usr/man \
   --docdir=/usr/doc/$PRGNAM-$VERSION \
   --build=$ARCH-slackware-linux \
+  --disable-pam \
   --with-wwwroot=$WWWROOT \
+  --with-wwwuser=$WWWUSER \
+  --with-wwwgroup=$WWWGROUP \
   --with-mysql=$MYSQL \
   --enable-ipv6=$IPV6 \
   --enable-admin=$ADMIN \
@@ -102,5 +111,4 @@ cat $CWD/doinst.sh > $PKG/install/doinst.sh
 
 cd $PKG
 /sbin/makepkg -l y -c n $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
-
 
