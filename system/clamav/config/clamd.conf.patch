@@ -1,6 +1,5 @@
-diff -Nur clamav-0.95.2.orig/etc/clamd.conf clamav-0.95.2/etc/clamd.conf
---- clamav-0.95.2.orig/etc/clamd.conf	2009-04-07 05:32:06.000000000 -0500
-+++ clamav-0.95.2/etc/clamd.conf	2009-08-10 10:56:05.791514384 -0500
+--- clamav-0.96/etc/clamd.conf.orig	2010-04-06 17:19:33.200490252 +0200
++++ clamav-0.96/etc/clamd.conf	2010-04-06 17:23:11.010490468 +0200
 @@ -5,7 +5,7 @@
  
  
@@ -34,12 +33,22 @@ diff -Nur clamav-0.95.2.orig/etc/clamd.conf clamav-0.95.2/etc/clamd.conf
  
  # Optional path to the global temporary directory.
  # Default: system specific (usually /tmp or /var/tmp).
-@@ -69,11 +69,11 @@
+@@ -73,19 +73,19 @@
  
  # Path to a local socket file the daemon will listen on.
  # Default: disabled (must be specified by a user)
--LocalSocket /tmp/clamd.socket
+-#LocalSocket /tmp/clamd.socket
 +LocalSocket /var/run/clamav/clamd.socket
+ 
+ # Sets the group ownership on the unix socket.
+ # Default: disabled (the primary group of the user running clamd)
+-#LocalSocketGroup virusgroup
++LocalSocketGroup clamav
+ 
+ # Sets the permissions on the unix socket to the specified mode.
+ # Default: disabled (socket is world accessible)
+-#LocalSocketMode 660
++LocalSocketMode 660
  
  # Remove stale socket after unclean shutdown.
  # Default: yes
@@ -48,7 +57,7 @@ diff -Nur clamav-0.95.2.orig/etc/clamd.conf clamav-0.95.2/etc/clamd.conf
  
  # TCP port address.
  # Default: no
-@@ -167,14 +167,14 @@
+@@ -183,14 +183,14 @@
  
  # Run as another user (clamd must be started by root for this option to work)
  # Default: don't drop privileges
