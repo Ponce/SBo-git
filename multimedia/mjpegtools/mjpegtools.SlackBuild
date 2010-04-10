@@ -58,6 +58,9 @@ chmod -R a-s,u+w,go+r-w .
 # Fix for x86_64
 sed -i -e '/ARCHFLAGS=/s:=.*:=:' configure
 
+# fix for gcc 4.4 of current
+patch -p0 < $CWD/mplex_gcc44.diff
+
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \

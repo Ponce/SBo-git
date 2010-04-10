@@ -23,9 +23,9 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 PRGNAM=kvirc
-VERSION=${VERSION:-3.4.2}
+VERSION=${VERSION:-r4246}
 ARCH=${ARCH:-i486}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
 CWD=$(pwd)
@@ -44,6 +44,10 @@ elif [ "$ARCH" = "x86_64" ]; then
   LIBDIRSUFFIX="64"
 fi
 
+# some environment stuff
+export QTDIR=/usr/lib${LIBDIRSUFFIX}
+export KDEDIR=/usr
+
 # Exit on errors
 set -e
 
@@ -51,7 +55,7 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar jxvf $CWD/$PRGNAM-$VERSION.tar.bz2
+tar xvf $CWD/$PRGNAM-$VERSION.tar.xz
 cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
@@ -60,28 +64,33 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-CFLAGS="$SLKCFLAGS" \
-CXXFLAGS="$SLKCFLAGS" \
-./configure \
-  --prefix=/usr \
-  --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --sysconfdir=/etc \
-  --localstatedir=/var \
-  --mandir=/usr/man \
-  --docdir=/usr/doc/$PRGNAM-$VERSION \
-  --build=$ARCH-slackware-linux \
-  --with-big-channels \
-  --with-x
+mkdir -p build
+cd build
+  cmake \
+    -DCMAKE_C_FLAGS="$SLKCFLAGS -DNDEBUG" \
+    -DCMAKE_CXX_FLAGS="$SLKCFLAGS -DNDEBUG" \
+    -DCMAKE_BUILD_TYPE="Release" \
+    -DCMAKE_INSTALL_PREFIX=/usr \
+    -DINSTALL_DOC_DIR=doc/$PRGNAM-$VERSION \
+    -DBUILD_SHARED_LIBS=ON \
+    -DUSE_ENV_FLAGS=ON \
+    -DLIB_SUFFIX=$LIBDIRSUFFIX \
+    .. 
 
-make
-make install DESTDIR=$PKG
+  make
+  make install DESTDIR=$PKG
+
+cd -
+
+# fix man path
+mv $PKG/usr/share/man $PKG/usr/man
 
 # Strip binaries and libraries
 ( cd $PKG
   find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
     xargs strip --strip-unneeded 2> /dev/null || true
   find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null
+    xargs strip --strip-unneeded 2> /dev/null || true
 )
 
 # Compress man pages

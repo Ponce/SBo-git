@@ -1,69 +1,208 @@
 #!/bin/sh
+# $Id: x264.SlackBuild,v 1.2 2009/05/19 10:36:44 root Exp root $
+# Copyright (c) 2009 Eric Hameleers <alien@slackware.com>
+# All rights reserved.
+#
+#   Permission to use, copy, modify, and distribute this software for
+#   any purpose with or without fee is hereby granted, provided that
+#   the above copyright notice and this permission notice appear in all
+#   copies.
+#
+#   THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+#   WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+#   MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+#   IN NO EVENT SHALL THE AUTHORS AND COPYRIGHT HOLDERS AND THEIR
+#   CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+#   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+#   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+#   USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+#   ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+#   OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+#   OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+#   SUCH DAMAGE.
+# -----------------------------------------------------------------------------
+#
+# Slackware SlackBuild script 
+# ===========================
+# By:         Eric Hameleers <alien@slackware.com>
+# For:        x264
+# Descr:      a free h264/avc encoder
+# URL:        http://www.videolan.org/developers/x264.html
+# Needs:      yasm (compile-time only)
+# Changelog:  
+# 20090518-1: 19/May/2009 by Eric Hameleers <alien@slackware.com>
+#             * Initial build.
+# 
+# Run 'sh x264.SlackBuild' to build a Slackware package.
+# The package (.tgz) and .txt file as well as build logs are created in /tmp .
+# Install it using 'installpkg'. 
+#
+# -----------------------------------------------------------------------------
+# slightly modified by Ponce
 
-# Slackware build script for x264
-
-# Written by core (eroc@linuxmail.org)
-# Modified by Heinz Wiesinger <pprkut@liwjatan.at>
+# Set initial variables:
 
 PRGNAM=x264
-VERSION=20090310
-ARCH=${ARCH:-i486}
+VERSION=${VERSION:-20100318}
+ARCH=${ARCH:-x86_64}
 BUILD=${BUILD:-1}
-TAG=${TAG:-_SBo}
+NUMJOBS=${NUMJOBS:" -j2 "}
+TAG=${TAG:-ponce}
 
-CWD=$(pwd)
-TMP=${TMP:-/tmp/SBo}
+DOCS=" AUTHORS COPYING doc/*.txt"
+
+# Where do we look for sources?
+SRCDIR=$(cd $(dirname $0); pwd)
+
+# Place to build (TMP) package (PKG) and output (OUTPUT) the program:
+TMP=${TMP:-/tmp/build}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 
-if [ "$ARCH" = "i486" ]; then
-  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
-  LIBDIRSUFFIX=""
-elif [ "$ARCH" = "i686" ]; then
-  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
-  LIBDIRSUFFIX=""
-elif [ "$ARCH" = "x86_64" ]; then
-  SLKCFLAGS="-O2 -fPIC"
-  LIBDIRSUFFIX="64"
+SOURCE="$SRCDIR/${PRGNAM}-snapshot-${VERSION}-2245.tar.bz2"
+SRCURL="ftp://ftp.videolan.org/pub/videolan/${PRGNAM}/snapshots/${PRGNAM}-snapshot-${VERSION}-2245.tar.bz2"
+
+##
+## --- with a little luck, you won't have to edit below this point --- ##
+##
+
+# Exit the script on errors:
+set -e
+trap 'echo "$0 FAILED at line ${LINENO}" | tee $OUTPUT/error-${PRGNAM}.log' ERR
+# Catch unitialized variables:
+set -u
+P1=${1:-1}
+
+case "$ARCH" in
+  i486)      SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+             SLKLDFLAGS=""; LIBDIRSUFFIX=""
+             ARCHOPTS=""
+             ;;
+  i686)      SLKCFLAGS="-O2 -march=i686 -mtune=i686"
+             SLKLDFLAGS=""; LIBDIRSUFFIX=""
+             ARCHOPTS=""
+             ;;
+  s390)      SLKCFLAGS="-O2"
+             SLKLDFLAGS=""; LIBDIRSUFFIX=""
+             ARCHOPTS=""
+             ;;
+  powerpc)   SLKCFLAGS="-O2"
+             SLKLDFLAGS=""; LIBDIRSUFFIX=""
+             ARCHOPTS=""
+             ;;
+  x86_64)    SLKCFLAGS="-O2 -fPIC"
+             SLKLDFLAGS="-L/usr/lib64"; LIBDIRSUFFIX="64"
+             ARCHOPTS="--enable-pic"
+             ;;
+  athlon-xp) SLKCFLAGS="-march=athlon-xp -O3 -pipe -fomit-frame-pointer"
+             SLKLDFLAGS=""; LIBDIRSUFFIX=""
+             ARCHOPTS=""
+             ;;
+esac
+
+# Create working directories:
+mkdir -p $OUTPUT          # place for the package to be saved
+mkdir -p $TMP/tmp-$PRGNAM # location to build the source
+mkdir -p $PKG             # place for the package to be built
+rm -rf $PKG/*             # always erase old package's contents
+rm -rf $TMP/tmp-$PRGNAM/* # remove the remnants of previous build
+rm -rf $OUTPUT/{configure,make,install,error,makepkg}-$PRGNAM.log
+                          # remove old log files
+
+# Source file availability:
+if ! [ -f ${SOURCE} ]; then
+  if ! [ "x${SRCURL}" == "x" ]; then
+    # Check if the $SRCDIR is writable at all - if not, download to $OUTPUT
+    [ -w "$SRCDIR" ] || SOURCE="$OUTPUT/$(basename $SOURCE)"
+    echo "Source '$(basename ${SOURCE})' not available yet..."
+    echo "Will download file to $(dirname $SOURCE)"
+    wget -nv -T 20 -O "${SOURCE}" "${SRCURL}" || true
+    if [ $? -ne 0 -o ! -s "${SOURCE}" ]; then
+      echo "Downloading '$(basename ${SOURCE})' failed... aborting the build."
+      mv -f "${SOURCE}" "${SOURCE}".FAIL
+      exit 1
+    fi
+  else
+    echo "File '$(basename ${SOURCE})' not available... aborting the build."
+    exit 1
+  fi
 fi
 
-set -e
+if [ "$P1" == "--download" ]; then
+  echo "Download complete."
+  exit 0
+fi
 
-rm -rf $PKG
-mkdir -p $TMP $PKG $OUTPUT
-cd $TMP
-rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-*-$VERSION-*.tar.bz2
-mv $PRGNAM-*-$VERSION-*/ $PRGNAM-$VERSION
-cd $PRGNAM-$VERSION
+# --- PACKAGE BUILDING ---
+
+echo "++"
+echo "|| $PRGNAM-$VERSION"
+echo "++"
+
+cd $TMP/tmp-$PRGNAM
+echo "Extracting the source archive(s) for $PRGNAM..."
+tar -xvf ${SOURCE}
+cd ${PRGNAM}-snapshot-${VERSION}*
 chown -R root:root .
 chmod -R u+w,go+r-w,a-s .
 
-CFLAGS="$SLKCFLAGS" \
+echo Building ...
+
+# Check for yasm, use older x264 snapshot if not found:
+if ! which yasm >/dev/null 2>&1 ; then
+  echo "##"
+  echo "## The 'yasm' program does not seem to be installed."
+  echo "## The X264 codec compilation needs yasm (nasm will not do)"
+  echo "## Aborting the build"
+  echo "##"
+  exit 1
+fi
+
+LDFLAGS="$SLKLDFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
+CFLAGS="$SLKCFLAGS" \
 ./configure \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
-  --enable-pthread \
   --enable-visualize \
-  --enable-shared
+  --enable-shared \
+  $ARCHOPTS \
+  --host=$ARCH-slackware-linux \
+  2>&1 | tee $OUTPUT/configure-${PRGNAM}.log
+make $NUMJOBS 2>&1 | tee $OUTPUT/make-${PRGNAM}.log
 
-make
-make install DESTDIR=$PKG
+# Install all the needed stuff to the package dir
+# Use installwatch if available, to produce a logfile of the installation
+# process that is more easily readable:
+if $(which installwatch > /dev/null 2>&1); then
+  installwatch -o $OUTPUT/install-${PRGNAM}.log make DESTDIR=$PKG install
+else
+  make DESTDIR=$PKG install 2>&1 |tee $OUTPUT/install-${PRGNAM}.log
+fi
 
-( cd $PKG
-  find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null || true
-  find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null
-)
-
+# Add documentation:
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
-cp -a AUTHORS COPYING doc/*.txt $PKG/usr/doc/$PRGNAM-$VERSION
-cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+cp -a $DOCS $PKG/usr/doc/$PRGNAM-$VERSION || true
+cat $SRCDIR/$(basename $0) > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
+chown -R root:root $PKG/usr/doc/$PRGNAM-$VERSION
+find $PKG/usr/doc -type f -exec chmod 644 {} \;
 
+# Compress the man page(s):
+if [ -d $PKG/usr/man ]; then
+  find $PKG/usr/man -type f -name "*.?" -exec gzip -9f {} \;
+  for i in $(find $PKG/usr/man -type l -name "*.?") ; do ln -s $( readlink $i ).gz $i.gz ; rm $i ; done
+fi
+
+# Strip binaries:
+find $PKG | xargs file | grep -e "executable" -e "shared object" \
+  | grep ELF | cut -f 1 -d : | xargs strip --strip-unneeded 2> /dev/null
+find $PKG -name libx264.a | xargs strip 2> /dev/null
+
+# Add a package description:
 mkdir -p $PKG/install
-cat $CWD/slack-desc > $PKG/install/slack-desc
+cat $SRCDIR/slack-desc > $PKG/install/slack-desc
 
+# Build the package:
 cd $PKG
-/sbin/makepkg -l y -c n -p $OUTPUT/$PRGNAM-$VERSION-$ARCH-$BUILD$TAG.${PKGTYPE:-tgz}
+makepkg --linkadd y --chown n $OUTPUT/${PRGNAM}-${VERSION}-${ARCH}-${BUILD}${TAG}.${PKGTYPE:-tgz}
+

@@ -56,6 +56,9 @@ chmod -R a-s,u+w,go+r-w .
 # LIB_SUFFIX is ignored work around it.
 sed -i -e "s|DESTINATION lib|DESTINATION lib${LIBDIRSUFFIX}|g" \
   CMakeLists.txt
+# cut debug info and left -Werror fixing for gcc 4.4
+sed -i -e "s|-g -pipe -Werror -fsigned-char|-pipe -fsigned-char|g" \
+  CMakeLists.txt
 
 cmake \
   -DCMAKE_C_FLAGS:STRING="$SLKCFLAGS" \

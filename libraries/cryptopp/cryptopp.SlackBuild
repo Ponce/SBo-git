@@ -4,7 +4,7 @@
 # Written by Iskar Enev (iskar.enev@gmail.com)
 
 PRGNAM=cryptopp
-VERSION=${VERSION:-5.6.0}
+VERSION=${VERSION:-5.5.2}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -50,7 +50,7 @@ make install PREFIX=$PKG/usr
   find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
     xargs strip --strip-unneeded 2> /dev/null || true
   find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null
+    xargs strip --strip-unneeded 2> /dev/null || true
 )
 
 mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
