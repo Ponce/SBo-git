@@ -5,7 +5,7 @@
 # Written by Vincent Batts, vbatts@batts.mine.nu
 
 PRGNAM=wvdial
-VERSION=1.60
+VERSION=1.61
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -41,6 +41,8 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
+./configure
+
 # Add DESTDIR support to the Makefile
 patch -u Makefile $CWD/Makefile.diff
 
@@ -49,9 +51,9 @@ make prefix=/usr MANDIR=/usr/man install DESTDIR=$PKG
 
 ( cd $PKG
   find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null || exit 1
+    xargs strip --strip-unneeded 2> /dev/null || true
   find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null
+    xargs strip --strip-unneeded 2> /dev/null || true
 )
 
 ( cd $PKG/usr/man
