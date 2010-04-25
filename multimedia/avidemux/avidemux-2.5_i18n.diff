@@ -1,0 +1,40 @@
+diff -uar avidemux_2.5.2.orig/avidemux/ADM_userInterfaces/ADM_QT4/ui_support.cpp avidemux_2.5.2/avidemux/ADM_userInterfaces/ADM_QT4/ui_support.cpp
+--- avidemux_2.5.2.orig/avidemux/ADM_userInterfaces/ADM_QT4/ui_support.cpp	2008-10-01 15:49:39.000000000 +0200
++++ avidemux_2.5.2/avidemux/ADM_userInterfaces/ADM_QT4/ui_support.cpp	2010-01-29 23:48:31.000000000 +0100
+@@ -73,7 +73,7 @@
+ #ifdef __APPLE__
+ 	QString appdir = QCoreApplication::applicationDirPath() + "/../Resources/locale/";
+ #else
+-	QString appdir = QCoreApplication::applicationDirPath() + "/i18n/";
++	QString appdir = "/usr/share/avidemux/i18n/";
+ #endif
+ 
+ 	loadTranslation(&qtTranslator, appdir + "qt_" + QLocale::system().name());
+@@ -164,4 +164,4 @@
+ 	}
+ 
+ 	return "Qt";
+-}
+\ No newline at end of file
++}
+diff -uar avidemux_2.5.2.orig/cmake/Ts.cmake avidemux_2.5.2/cmake/Ts.cmake
+--- avidemux_2.5.2.orig/cmake/Ts.cmake	2009-08-01 13:11:58.000000000 +0200
++++ avidemux_2.5.2/cmake/Ts.cmake	2010-01-29 23:49:18.000000000 +0100
+@@ -64,7 +64,7 @@
+                 
+             SET(qm_files ${qm_files} ${_outXml} ${_out})
+ 
+-			INSTALL(FILES ${_out} DESTINATION "${CMAKE_INSTALL_PREFIX}/${BIN_DIR}/i18n")
++			INSTALL(FILES ${_out} DESTINATION "${CMAKE_INSTALL_PREFIX}/share/avidemux/i18n")
+         ENDFOREACH(ts_input ${ts_files})
+ 
+         SET(${_sources} ${${_sources}} ${qm_files})
+@@ -95,7 +95,7 @@
+                 
+             SET(qm_files ${qm_files} ${_out})
+ 
+-			INSTALL(FILES ${_out} DESTINATION "${CMAKE_INSTALL_PREFIX}/${BIN_DIR}/i18n")
++			INSTALL(FILES ${_out} DESTINATION "${CMAKE_INSTALL_PREFIX}/share/avidemux/i18n")
+         ENDFOREACH(ts_input ${ts_files})
+ 
+         SET(${_sources} ${${_sources}} ${qm_files})
