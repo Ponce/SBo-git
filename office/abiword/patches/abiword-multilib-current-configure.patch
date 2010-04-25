@@ -1,0 +1,10 @@
+--- abiword-2.8.4/configure.orig	2010-04-25 12:21:25.473517670 +0200
++++ abiword-2.8.4/configure	2010-04-25 12:22:05.373014736 +0200
+@@ -16770,6 +16770,7 @@
+ else
+ 	DEPS_CFLAGS=$pkg_cv_DEPS_CFLAGS
+ 	DEPS_LIBS=$pkg_cv_DEPS_LIBS
++	DEPS_LIBS=${DEPS_LIBS/\ -L\/usr\/lib\ / -L\/usr\/lib64 }
+         { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+ 	:

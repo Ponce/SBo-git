@@ -76,6 +76,10 @@ patch -p1 < $CWD/patches/boost_asio.patch
 # This should make the help stuff work properly
 patch -p1 < $CWD/patches/url_show.patch 
 
+# fix building on -current
+autoreconf -i
+patch -p1 < $CWD/patches/abiword-multilib-current-configure.patch
+
 CPPFLAGS="-I$TMP/$PRGNAM-$VERSION" \
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
