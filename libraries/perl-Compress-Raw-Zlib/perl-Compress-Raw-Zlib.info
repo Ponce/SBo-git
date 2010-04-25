@@ -1,0 +1,8 @@
+PRGNAM="perl-Compress-Raw-Zlib"
+VERSION="2.024"
+HOMEPAGE="http://search.cpan.org/~pmqs/Compress-Raw-Zlib-2.024/"
+DOWNLOAD="http://search.cpan.org/CPAN/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.024.tar.gz"
+MD5SUM="5b637dbb36955b13db261f049fe529d9"
+MAINTAINER="David Somero"
+EMAIL="dsomero@hotmail.com"
+APPROVED=""
