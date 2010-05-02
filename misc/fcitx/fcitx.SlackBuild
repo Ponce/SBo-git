@@ -5,8 +5,7 @@
 
 # Modified by the slackbuilds.org project.  --michiel
 PRGNAM=fcitx
-VERSION=${VERSION:-3.6}
-SRCVER=${PKGVER:-3.6}
+VERSION=${VERSION:-3.6.3}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -33,8 +32,8 @@ rm -rf $PKG
 mkdir -p $TMP $PKG $OUTPUT
 cd $TMP
 rm -rf $PRGNAM-$VERSION
-tar xvf $CWD/$PRGNAM-$SRCVER.tar.bz2
-cd $PRGNAM-$SRCVER
+tar xvf $CWD/$PRGNAM-$VERSION.tar.bz2
+cd $PRGNAM-$VERSION
 chown -R root:root .
 find . \
  \( -perm 777 -o -perm 775 -o -perm 711 -o -perm 555 -o -perm 511 \) \
@@ -42,10 +41,11 @@ find . \
  \( -perm 666 -o -perm 664 -o -perm 600 -o -perm 444 -o -perm 440 -o -perm 400 \) \
  -exec chmod 644 {} \;
 
-./autogen.sh
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
+  --enable-recording \
+  --enable-dbus \
   --prefix=/usr \
   --libdir=/usr/lib${LIBDIRSUFFIX} \
   --sysconfdir=/etc \
@@ -60,18 +60,45 @@ make install DESTDIR=$PKG
   find . | xargs file | grep "executable" | grep ELF | cut -f 1 -d : | \
     xargs strip --strip-unneeded 2> /dev/null || true
   find . | xargs file | grep "shared object" | grep ELF | cut -f 1 -d : | \
-    xargs strip --strip-unneeded 2> /dev/null
+    xargs strip --strip-unneeded 2> /dev/null || true
 )
+
+mkdir -p $PKG/usr/share/{applications,pixmaps}
+cat <<EOF > $PKG/usr/share/applications/$PRGNAM.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=fcitx
+Name[zh_CN]=fcitx
+Name[zh_HK]=fcitx
+Name[zh_TW]=fcitx
+GenericName=fcitx input method
+GenericName[zh_CN]=小企鹅输入法
+GenericName[zh_HK]=小企鹅輸入法
+GenericName[zh_TW]=小企鹅輸入法
+Comment=fcitx input method
+Comment[zh_CN]=小企鹅输入法
+Comment[zh_HK]=小企鹅輸入法
+Comment[zh_TW]=小企鹅輸入法
+Exec=fcitx -d
+Icon=fcitx
+Terminal=false
+Type=Application
+X-GNOME-Autostart-Phase=Applications
+X-GNOME-AutoRestart=false
+X-GNOME-Autostart-Notify=true
+X-KDE-autostart-after=panel
+EOF
+cat $CWD/$PRGNAM.png > $PKG/usr/share/pixmaps/$PRGNAM.png
 
 mkdir -p $PKG/etc/profile.d
 cat $CWD/fcitx.sh > $PKG/etc/profile.d/fcitx.sh
 chmod 0755 $PKG/etc/profile.d/fcitx.sh
 
-sed -i -e 's/^/#/' $PKG/usr/share/fcitx/data/tables.conf 
-cat $CWD/fcitx.config > $PKG/usr/share/fcitx/data/config
-chmod 644 $PKG/usr/share/fcitx/data/config
+#sed -i -e 's/^/#/' $PKG/usr/share/fcitx/data/tables.conf 
+#cat $CWD/fcitx.config > $PKG/usr/share/fcitx/data/config
+#chmod 644 $PKG/usr/share/fcitx/data/config
 
-mkdir -p $PKG/usr/doc/$PRGNAM-$VERSION
+mv $PKG/usr/share/fcitx/doc $PKG/usr/doc/$PRGNAM-$VERSION
 cp -a AUTHORS COPYING ChangeLog INSTALL README THANKS TODO \
   $PKG/usr/doc/$PRGNAM-$VERSION
 cat $CWD/$PRGNAM.SlackBuild > $PKG/usr/doc/$PRGNAM-$VERSION/$PRGNAM.SlackBuild
