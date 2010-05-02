@@ -24,9 +24,10 @@
 
 PRGNAM=lirc
 VERSION=${VERSION:-0.8.6}
-ARCH=${ARCH:-i486}
+ARCH=${ARCH:-i386}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+SLKARCH="x86"
 
 KERNEL=${KERNEL:-$(uname -r)}
 PKG_VERS=${VERSION}_$(echo $KERNEL| tr - _)
@@ -36,18 +37,12 @@ TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
 
-if [ "$ARCH" = "i486" ]; then
-  SLKCFLAGS="-O2 -march=i486 -mtune=i686"
+if [ "$ARCH" = "i386" ]; then
+  SLKCFLAGS="-O2 -march=i386 -mtune=i686"
   LIBDIRSUFFIX=""
-  SRCARCH=x86
-elif [ "$ARCH" = "i686" ]; then
-  SLKCFLAGS="-O2 -march=i686 -mtune=i686"
-  LIBDIRSUFFIX=""
-  SRCARCH=x86
 elif [ "$ARCH" = "x86_64" ]; then
   SLKCFLAGS="-O2 -fPIC"
   LIBDIRSUFFIX="64"
-  SRCARCH=x86
 fi
 
 set -e
@@ -68,9 +63,13 @@ find . \
 # Disabling lirc_gpio driver as it does no longer work with kernel 2.6.22+
 sed -i -e "s:lirc_gpio\.o::" drivers/lirc_gpio/Makefile.am || exit 1
 
+# patch for kernel from http://hg.geexbox.org/geexbox/file/3d393b06ebb6/packages/lirc/patches/95_build-fix-2.6.33.diff
+zcat $CWD/lirc-2.6.33.diff.gz | patch -p1
+
 autoreconf
 libtoolize
 
+ARCH="$ARCH" \
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
@@ -89,7 +88,7 @@ CXXFLAGS="$SLKCFLAGS" \
 sed -i -e "s:lirc_parallel::" -e "s:lirc_bt829::" \
      Makefile drivers/Makefile drivers/*/Makefile tools/Makefile
 
-make SRCARCH=$SRCARCH
+make SRCARCH=$SLKARCH
 make install DESTDIR=$PKG
 
 mkdir -p $PKG/usr/share/$PRGNAM
