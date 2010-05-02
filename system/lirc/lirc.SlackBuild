@@ -27,6 +27,7 @@ VERSION=${VERSION:-0.8.6}
 ARCH=${ARCH:-i386}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
+SLKARCH="x86"
 
 KERNEL=${KERNEL:-$(uname -r)}
 PKG_VERS=${VERSION}_$(echo $KERNEL| tr - _)
@@ -39,11 +40,9 @@ OUTPUT=${OUTPUT:-/tmp}
 if [ "$ARCH" = "i386" ]; then
   SLKCFLAGS="-O2 -march=i386 -mtune=i686"
   LIBDIRSUFFIX=""
-  SLKARCH=${SLKARCH:-x86}
 elif [ "$ARCH" = "x86_64" ]; then
   SLKCFLAGS="-O2 -fPIC"
   LIBDIRSUFFIX="64"
-  SLKARCH=$ARCH
 fi
 
 set -e
