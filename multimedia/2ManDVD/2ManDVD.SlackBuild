@@ -7,9 +7,9 @@
 # Modified by the slackbuilds.org project.
 
 PRGNAM=2ManDVD
-VERSION=${VERSION:-1.2}
+VERSION=${VERSION:-1.3.3}
 ARCH=${ARCH:-i486}
-BUILD=${BUILD:-2}
+BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
 
 CWD=$(pwd)
@@ -55,14 +55,14 @@ qmake \
   QMAKE_CXXFLAGS="$SLKCFLAGS" \
   $PRGNAM.pro
 
-make
+make -j2
 
 install -D -m0755 $PRGNAM $PKG/usr/bin/$PRGNAM
 install -D -m0644 Interface/mandvdico.png $PKG/usr/share/pixmaps/mandvdico.png
 mkdir -p $PKG/usr/share/$PRGNAM
 chmod -R 755 Bibliotheque Interface
 cp -R \
-  Bibliotheque Interface 2mandvd_*.qm 2mandvd_*.ts *.wav *.pl \
+  Bibliotheque Interface 2mandvd_*.qm 2mandvd_*.ts *.pl \
   $PKG/usr/share/$PRGNAM
 
 ( cd $PKG
