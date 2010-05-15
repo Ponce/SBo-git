@@ -7,7 +7,7 @@
 # Modified by Heinz Wiesinger <pprkut@liwjatan.org>
 
 PRGNAM=ffmpeg
-VERSION=${VERSION:-0.5.1}
+VERSION=${VERSION:-r22986}
 ARCH=${ARCH:-i486}
 BUILD=${BUILD:-1}
 TAG=${TAG:-_SBo}
@@ -139,6 +139,10 @@ cd $PRGNAM-$VERSION
 chown -R root:root .
 chmod -R u+w,go+r-w,a-s .
 
+if [ "$ARCH" = "x86_64" ]; then
+  patch -p1 < $CWD/ffmpeg-r22986_x86_64_asm.patch
+fi
+
 CFLAGS="$SLKCFLAGS" \
 CXXFLAGS="$SLKCFLAGS" \
 ./configure \
@@ -150,6 +154,7 @@ CXXFLAGS="$SLKCFLAGS" \
   --enable-shared \
   --disable-static \
   --enable-pthreads \
+  --enable-memalign-hack \
   --enable-libtheora \
   --enable-gpl \
   --enable-version3 \
