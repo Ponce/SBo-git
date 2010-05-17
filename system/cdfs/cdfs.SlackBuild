@@ -2,7 +2,7 @@
 
 # Slackware build script for cdfs
 
-# Copyright 2009  Robby Workman  Northport, AL, USA
+# Copyright 2009, 2010  Robby Workman  Northport, AL, USA
 # All rights reserved.
 #
 # Redistribution and use of this script, with or without modification, is
@@ -25,7 +25,7 @@
 PRGNAM=cdfs
 VERSION=2.6.27
 ARCH=$(uname -m)
-BUILD=${BUILD:-1}
+BUILD=${BUILD:-2}
 TAG=${TAG:-_SBo}
 
 KERNEL=${KERNEL:-"$(uname -r)"}
