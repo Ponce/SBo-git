@@ -61,6 +61,7 @@ CWD=$(pwd)
 TMP=${TMP:-/tmp/SBo}
 PKG=$TMP/package-$PRGNAM
 OUTPUT=${OUTPUT:-/tmp}
+NUMJOBS="-j2"
 
 ##
 ## --- with a little luck, you won't have to edit below this point --- ##
